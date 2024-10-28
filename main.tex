@@ -174,11 +174,43 @@ All duplicates and null values were also removed.
 
                     \begin{center}
                         \includegraphics{sse_vs_k.png}
-                        \captionof{figure}{Inertia vs. Number of Clusters}
+                        \captionof{figure}{SSE vs. Number of Clusters}
                     \end{center}
 
-              \item \textbf{MISSING EXPLANATION}
-              \item \textbf{MISSING EXPLANATION}
+              \item Given the obtained results, the optimal number of clusters can be seen at the "elbow point", the point where before it the SSE decreases rapidly and after it decreases slowly. From the plot, we can see that this point is at $k=4$, meaning that there should be \textbf{4 underlying customer segments}.
+
+                    To complement the reasoning, decreasing SSE means that data points are closer to the centroids and more data patterns are being captured. However, if too many clusters are used, the model may be at risk of overfitting, being perfect for the training data but bad at generalizing to new data.
+
+              \item \textit{k-modes} is designed to work with categorical data, while \textit{k-means} is designed to work with numerical data. Since our dataset is mainly comprised of categorical data, \textbf{\textit{k-modes} would be a better approach}:
+
+                    \begin{center}
+                        \begin{minipage}{0.5\textwidth}
+                            \texttt{Data columns \{total 16 columns\}:\\
+                                \#   Column     Non-Null Count  Dtype \\
+                                ---  ------     --------------  ----- \\
+                                0   age        10316 non-null  int64 \\
+                                1   job        10316 non-null  object \\
+                                2   marital    10316 non-null  object \\
+                                3   education  10316 non-null  object \\
+                                4   default    10316 non-null  object \\
+                                5   balance    10316 non-null  int64 \\
+                                6   housing    10316 non-null  object \\
+                                7   loan       10316 non-null  object \\
+                                8   contact    10316 non-null  object \\
+                                9   day        10316 non-null  int64 \\
+                                10  month      10316 non-null  object \\
+                                11  duration   10316 non-null  int64 \\
+                                12  campaign   10316 non-null  int64 \\
+                                13  pdays      10316 non-null  int64 \\
+                                14  previous   10316 non-null  int64 \\
+                                15  poutcome   10316 non-null  object\\}
+                        \end{minipage}
+                    \end{center}
+
+                    \textit{k-means} uses Euclidean distances to cluster continuous data. Meaning that, the smaller the distance between two points, the more similar they are, and with high chances of landing in the same cluster.
+
+                    Whereas \textit{k-modes} uses the Hamming distance, the number of dissimilarities between data points (the number of positions for an equal feature that are different, that lead to mis-matches). This is more suitable for categorical data, since it doesn't assume a linear relationship between the data points, as \textit{k-means} does.
+
           \end{enumerate}
     \item The 3 next exercises work upon the dataset data normalized according to \textbf{StandardScaler}
           \begin{enumerate}[leftmargin=0pt, label=\textbf{\alph*.)}]
@@ -195,7 +227,6 @@ All duplicates and null values were also removed.
 
                     We can conclude, by observing the plot, these 2 components aren't enough to clearly separate the clusters, as they overlap in some regions. This can be explained by the fact that, together, these components only explain 22.76\% of the variance in the data.
 
-                    \textbf{IMPROVE}
               \item When looking at the cluster conditional features for the original features 'job' and 'education', we get the following results:
 
                     \begin{center}
@@ -203,7 +234,11 @@ All duplicates and null values were also removed.
                         \captionof{figure}{Cluster conditional features for 'job' and 'education'}
                     \end{center}
 
-                    \textbf{MISSING EXPLANATION}
+                    Looking at the "job" histogram first, we can see some patterns starting to appear. For example, cluster 3 covers only retired people, while the other two clusters, 1 and 2, have a more diverse distribution of jobs, with some highlights being students belonging to cluster 1 and house-maids mostly belonging to cluster 2, with both clusters, overall, having no discernible pattern.
+
+                    When taking the "education" histogram into account, the only major highlight is that most primary-educated people belong to cluster 3. The other education levels don't have a clear pattern, being spread across all clusters.
+
+                    These results show that the clusters are not well separated when only considering the top 2 principal components. Some different ways to improve separation could be to increase the number of principal components used to cluster the data, to consider more clusters (being carefull not to overfit the data), or, the most effective way, to use a different clustering algorithm, better suited for the dataset, such as \textit{k-modes}.
           \end{enumerate}
 \end{enumerate}
 \newpage
